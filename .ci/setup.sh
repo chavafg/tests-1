@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2017-2019 Intel Corporation
+# Copyright (c) 2017-2020 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -46,29 +46,6 @@ setup_distro_env() {
 	sudo systemctl start haveged
 }
 
-install_docker() {
-	if [ "${TEST_CGROUPSV2}" == "true" ]; then
-		info "Docker won't be installed: testing cgroups V2"
-		return
-	fi
-
-	if ! command -v docker >/dev/null; then
-		"${cidir}/../cmd/container-manager/manage_ctr_mgr.sh" docker install
-	fi
-	# If on CI, check that docker version is the one defined
-	# in versions.yaml. If there is a different version installed,
-	# install the correct version..
-	docker_version=$(get_version "externals.docker.version")
-	docker_version=${docker_version/v/}
-	docker_version=${docker_version/-*/}
-
-	sudo systemctl restart docker
-
-	if ( ! sudo docker version | grep -q "$docker_version" ) && [ "$CI" == true ]; then
-		"${cidir}/../cmd/container-manager/manage_ctr_mgr.sh" docker install -f
-	fi
-}
-
 enable_nested_virtualization() {
 	case "$arch" in
 	x86_64 | s390x)
@@ -108,15 +85,6 @@ install_extra_tools() {
 		source "${cidir}/${arch}/lib_setup_${arch}.sh"
 	fi
 
-	# Do not install immediately kubernetes on Fedora as
-	# first we will run Openshift with its correspondent CRI-O
-	# version and then we will install kubernetes with its
-	# correspondent CRI-O version in order to not break the
-	# compatibility matrix
-	if [ "$ID" == "fedora" ]; then
-		export KUBERNETES="no"
-	fi
-
 	[ "${CRIO}" = "yes" ] &&
 		echo "Install CRI-O" &&
 		bash -f "${cidir}/install_crio.sh" &&
@@ -154,7 +122,6 @@ main() {
 
 	[ "$setup_type" = "minimal" ] && info "finished minimal setup" && exit 0
 
-	install_docker
 	enable_nested_virtualization
 	install_kata
 	install_extra_tools

@@ -39,10 +39,8 @@ systemctl is-active --quiet docker || sudo systemctl start docker
 
 K8S_TEST_UNION=("k8s-attach-handlers.bats" \
 	"k8s-configmap.bats" \
-	"k8s-copy-file.bats" \
 	"k8s-credentials-secrets.bats" \
 	"k8s-custom-dns.bats" \
-	"k8s-empty-dirs.bats" \
 	"k8s-env.bats" \
 	"k8s-expose-ip.bats" \
 	"k8s-job.bats" \
@@ -50,7 +48,6 @@ K8S_TEST_UNION=("k8s-attach-handlers.bats" \
 	"k8s-liveness-probes.bats" \
 	"k8s-memory.bats" \
 	"k8s-parallel.bats" \
-	"k8s-pid-ns.bats" \
 	"k8s-pod-quota.bats" \
 	"k8s-port-forward.bats" \
 	"k8s-projected-volume.bats" \

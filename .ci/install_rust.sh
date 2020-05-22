@@ -16,7 +16,7 @@ rustarch=$(${cidir}/kata-arch.sh --rust)
 # recent functional version
 version="${1:-""}"
 if [ -z "${version}" ]; then
-	version=$(get_version "languages.rust.meta.newest-version")
+	version=$(get_version "languages.rust.version")
 fi
 
 if ! command -v rustup > /dev/null; then
@@ -25,8 +25,8 @@ fi
 
 export PATH="${PATH}:${HOME}/.cargo/bin"
 
-rustup toolchain install ${version}
 rustup default ${version}
-rustup target install ${rustarch}-unknown-linux-musl
+rustup toolchain install ${version}-musl
+rustup target add ${rustarch}-unknown-linux-musl
 rustup component add rustfmt
 sudo ln -sf /usr/bin/g++ /bin/musl-g++

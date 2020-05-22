@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2017-2018 Intel Corporation
+# Copyright (c) 2017-2020 Intel Corporation
 # Copyright (c) 2018 ARM Limited
 #
 # SPDX-License-Identifier: Apache-2.0
@@ -132,11 +132,11 @@ function get_dep_from_yaml_db(){
 
 function get_version(){
 	dependency="$1"
-	runtime_repo="github.com/kata-containers/runtime"
-	runtime_repo_dir="$GOPATH/src/${runtime_repo}"
-	versions_file="${runtime_repo_dir}/versions.yaml"
-	mkdir -p "$(dirname ${runtime_repo_dir})"
-	[ -d "${runtime_repo_dir}" ] ||  git clone --quiet https://${runtime_repo}.git "${runtime_repo_dir}"
+	kata_repo="github.com/kata-containers/kata-containers"
+	kata_repo_dir="$GOPATH/src/${kata_repo}"
+	versions_file="${kata_repo_dir}/src/runtime/versions.yaml"
+	mkdir -p "$(dirname ${kata_repo_dir})"
+	[ -d "${kata_repo_dir}" ] ||  git clone --quiet https://${runtime_repo}.git "${runtime_repo_dir}"
 
 	get_dep_from_yaml_db "${versions_file}" "${dependency}"
 }
