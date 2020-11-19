@@ -277,6 +277,14 @@ case "${CI_JOB}" in
 	export KATA_HYPERVISOR="cloud-hypervisor"
 	export KUBERNETES="yes"
 	;;
+"FIRECRACKER")
+	init_ci_flags
+	export KATA_HYPERVISOR="firecracker"
+	export CRI_CONTAINERD="yes"
+	export CRI_RUNTIME="containerd"
+	export CRIO="no"
+	export OPENSHIFT="no"
+;;
 "VFIO")
 	init_ci_flags
 	export CRIO="no"

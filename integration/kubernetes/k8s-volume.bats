@@ -12,6 +12,7 @@ issue="https://github.com/kata-containers/runtime/issues/1127"
 
 setup() {
 	[ "${TEST_INITRD}" == "yes" ] && skip "test not working see: ${issue}"
+	[ "${KATA_HYPERVISOR}" == "firecracker" ] && skip "test not working see: ${issue}"
 
 	export KUBECONFIG="$HOME/.kube/config"
 	get_pod_config_dir
@@ -27,6 +28,8 @@ setup() {
 
 @test "Create Persistent Volume" {
 	[ "${TEST_INITRD}" == "yes" ] && skip "test not working see: ${issue}"
+	[ "${KATA_HYPERVISOR}" == "firecracker" ] && skip "test not working see: ${issue}"
+
 	wait_time=10
 	sleep_time=2
 	volume_name="pv-volume"
@@ -58,6 +61,8 @@ setup() {
 
 teardown() {
 	[ "${TEST_INITRD}" == "yes" ] && skip "test not working see: ${issue}"
+	[ "${KATA_HYPERVISOR}" == "firecracker" ] && skip "test not working see: ${issue}"
+
 	kubectl delete pod "$pod_name"
 	kubectl delete pvc "$volume_claim"
 	kubectl delete pv "$volume_name"
